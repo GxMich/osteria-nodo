@@ -1,0 +1,1496 @@
+/* ==========================================================================
+   OSTERIA NODO — SUPERFICI
+
+   Composition, section by section, written mobile-first: the base rules are
+   the phone and the media queries add the room. Every layout below is built
+   out of two things — panes of glass and the black between them. There is no
+   column grid in this file on purpose; the previous version of this site was
+   composed on a twelve-column editorial register, and that register is the
+   single thing most likely to make two projects look like the same project.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Header
+   -------------------------------------------------------------------------- */
+
+.barra {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  border-bottom: 1px solid transparent;
+  transition:
+    background-color var(--t-vetro) var(--e-vetro),
+    border-color var(--t-vetro) var(--e-vetro),
+    backdrop-filter var(--t-vetro) var(--e-vetro);
+}
+
+/*
+ * The bar is nothing until you leave the cover, then it becomes glass. It is
+ * the one element that changes material rather than size — no shrinking
+ * logo, no collapsing height.
+ */
+.barra-vetro {
+  background: rgba(14, 11, 9, 0.6);
+  border-bottom-color: var(--bordo);
+  backdrop-filter: blur(var(--sfocatura)) saturate(1.4);
+  -webkit-backdrop-filter: blur(var(--sfocatura)) saturate(1.4);
+}
+
+.barra-corpo {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  padding-block: 0.875rem;
+}
+
+/*
+ * The wordmark. Two words, the second inset by exactly the width of the mark
+ * that ties them — the knot the restaurant is named after, drawn once, in
+ * steel rather than in a brand colour.
+ */
+.insegna {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 44px;
+  margin-right: auto;
+  font-family: var(--font-titolo);
+  font-weight: 500;
+  font-size: 0.9375rem;
+  line-height: 1;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.insegna-riga + .insegna-riga {
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+  margin-top: 0.22em;
+}
+
+.insegna-riga + .insegna-riga::before {
+  content: "";
+  width: 0.9em;
+  height: 1px;
+  background: var(--color-latte);
+  flex: none;
+}
+
+.barra-nav {
+  display: none;
+}
+
+.barra-azione {
+  padding: 0.6875rem 1rem;
+  min-height: 44px;
+  font-size: 0.625rem;
+  letter-spacing: 0.16em;
+}
+
+.barra-bottone {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding-inline: 0.25rem;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+@media (min-width: 900px) {
+  .barra-corpo {
+    padding-block: 1.125rem;
+    gap: clamp(1.5rem, 3vw, 3rem);
+  }
+
+  .insegna {
+    font-size: 1rem;
+  }
+
+  .barra-nav {
+    display: block;
+  }
+
+  .barra-nav ul {
+    display: flex;
+    gap: clamp(1rem, 2vw, 2rem);
+  }
+
+  .barra-nav a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-cenere);
+    transition: color var(--t-tocco) var(--e-tocco);
+  }
+
+  .barra-nav a:hover {
+    color: var(--color-latte);
+  }
+
+  .barra-azione {
+    font-size: 0.6875rem;
+    padding: 0.75rem 1.25rem;
+  }
+
+  .barra-bottone {
+    display: none;
+  }
+}
+
+.pannello {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  background: rgba(14, 11, 9, 0.93);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  padding-top: 5.5rem;
+  overflow-y: auto;
+}
+
+.pannello a {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  padding-block: 1rem;
+  border-bottom: 1px solid var(--bordo);
+}
+
+.pannello-numero {
+  color: var(--color-cenere);
+}
+
+.pannello-azione {
+  display: flex;
+  margin-top: 2rem;
+}
+
+.pannello-meta {
+  margin-top: 1.5rem;
+}
+
+/* --------------------------------------------------------------------------
+   Apertura — the cover
+   -------------------------------------------------------------------------- */
+
+/*
+ * The room, seen from the door. The photograph is not a rectangle in a
+ * column: it is the only lit thing in a black field, dissolving into the
+ * dark on every side. The type sits in the dark beside it.
+ */
+.apertura {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding-top: clamp(1.5rem, 6vw, 3rem);
+  padding-bottom: clamp(3rem, 8vw, 6rem);
+}
+
+.apertura-corpo {
+  display: contents;
+}
+
+.apertura-luce {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  margin-top: 2rem;
+  overflow: hidden;
+  order: 3;
+}
+
+/* The cover reads: kicker, statement, photograph, panel, facts. */
+.apertura-marca {
+  order: 1;
+}
+.apertura-enunciato {
+  order: 2;
+}
+.apertura-lastra {
+  order: 4;
+}
+.apertura-dati {
+  order: 5;
+}
+
+.apertura-luce img {
+  object-fit: cover;
+}
+
+.apertura-marca {
+  color: var(--color-cenere);
+}
+
+.apertura-marca strong {
+  color: var(--color-latte);
+  font-weight: 500;
+}
+
+.apertura-enunciato {
+  margin-top: 1.5rem;
+}
+
+.apertura-lastra {
+  margin-top: 2rem;
+  padding: 1.5rem;
+}
+
+.apertura-lastra .testo {
+  color: var(--color-latte);
+}
+
+.apertura-azioni {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem 1.5rem;
+  margin-top: 1.75rem;
+}
+
+.apertura-azioni .azione {
+  flex: 1 1 auto;
+}
+
+.apertura-dati {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem;
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--bordo);
+}
+
+.apertura-dati dd {
+  margin-top: 0.375rem;
+  font-size: 0.875rem;
+}
+
+@media (min-width: 900px) {
+  /*
+   * On the desktop the photograph runs off the right trim edge and the
+   * statement holds the dark on the left. The two never touch: the black
+   * between them is the composition.
+   */
+  .apertura {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+    align-items: center;
+    column-gap: clamp(2rem, 5vw, 5rem);
+    min-height: min(88vh, 54rem);
+    padding-bottom: clamp(4rem, 8vw, 7rem);
+  }
+
+  .apertura-corpo {
+    display: block;
+    grid-column: 1;
+  }
+
+  .apertura-luce {
+    grid-column: 2;
+    grid-row: 1;
+    aspect-ratio: 3 / 4;
+    margin-top: 0;
+    height: min(74vh, 44rem);
+  }
+
+  .apertura-lastra {
+    max-width: 30rem;
+  }
+
+  .apertura-azioni .azione {
+    flex: 0 0 auto;
+  }
+
+  .apertura-dati {
+    grid-column: 1 / -1;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    margin-top: 0;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Il principio
+   -------------------------------------------------------------------------- */
+
+/*
+ * Type on black and nothing else. The one section with no glass and no
+ * photograph — after a cover that fills the frame the page needs somewhere
+ * to put the idea down.
+ */
+.principio-enunciato {
+  max-width: 18ch;
+}
+
+.principio-lastra {
+  margin-top: clamp(2.5rem, 6vw, 5rem);
+  padding: 1.5rem;
+}
+
+.principio-lastra p + p {
+  margin-top: 1rem;
+}
+
+.principio-nota {
+  margin-top: 1.5rem;
+}
+
+@media (min-width: 900px) {
+  .principio {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    column-gap: clamp(3rem, 8vw, 8rem);
+    align-items: start;
+  }
+
+  .principio-lastra {
+    margin-top: clamp(4rem, 9vw, 8rem);
+    padding: clamp(1.75rem, 2.5vw, 2.5rem);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Il luogo
+   -------------------------------------------------------------------------- */
+
+.luogo-grande {
+  position: relative;
+  aspect-ratio: 3 / 2;
+  overflow: hidden;
+}
+
+.luogo-grande img {
+  object-fit: cover;
+}
+
+/*
+ * The pane of facts rides up over the lower edge of the photograph. It is
+ * the only overlap on the site and it is what the glass is for: you are
+ * reading the room through a window onto it.
+ */
+.luogo-lastra {
+  position: relative;
+  z-index: 2;
+  margin-top: -3rem;
+  margin-inline: var(--spacing-margine);
+  padding: 1.5rem;
+}
+
+.luogo-voce {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.25rem 1rem;
+  padding-block: 0.75rem;
+  border-top: 1px solid var(--bordo);
+}
+
+.luogo-voce:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.luogo-voce dd {
+  font-size: 0.875rem;
+  text-align: right;
+}
+
+.luogo-testo {
+  margin-top: 2.5rem;
+}
+
+.luogo-testo p + p {
+  margin-top: 1rem;
+}
+
+.luogo-dettagli {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 2.5rem;
+}
+
+.luogo-dettaglio-lastra {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+}
+
+.luogo-dettagli figcaption {
+  margin-top: 0.625rem;
+}
+
+@media (min-width: 900px) {
+  .luogo-grande {
+    aspect-ratio: 21 / 9;
+  }
+
+  .luogo-lastra {
+    margin-top: -5rem;
+    margin-left: 0;
+    margin-right: auto;
+    max-width: 26rem;
+    padding: 2rem;
+  }
+
+  .luogo-corpo {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+    column-gap: clamp(2rem, 5vw, 5rem);
+    align-items: start;
+    margin-top: clamp(3rem, 6vw, 5rem);
+  }
+
+  .luogo-testo {
+    margin-top: 0;
+  }
+
+  .luogo-dettagli {
+    margin-top: 0;
+  }
+
+  .luogo-dettagli figure:last-child {
+    margin-top: 3rem;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   La carta — the signature
+   -------------------------------------------------------------------------- */
+
+.carta-apertura {
+  max-width: 34rem;
+}
+
+.carta-chiave {
+  margin-top: 1.25rem;
+}
+
+.carta-istruzione {
+  margin-top: 1rem;
+  color: var(--color-latte);
+}
+
+.carta-impianto {
+  margin-top: clamp(2rem, 5vw, 3.5rem);
+}
+
+/*
+ * IL PASSE — the one thing this page is meant to be remembered for.
+ *
+ * A single glass disc, the only curved form anywhere on the site, holding
+ * whichever dish the reader is on. The photograph is sharp at the centre and
+ * dissolves into frost toward the rim, which is what looking down into a
+ * glass actually does — the blur here is optics, not decoration, and it is
+ * the reason this interface is made of glass at all.
+ *
+ * Everything else on the page is rectilinear, so the circle is recognisable
+ * from across the room.
+ */
+.passe {
+  position: sticky;
+  top: 4.5rem;
+  z-index: 5;
+  margin: 0 auto 1.5rem;
+  width: 100%;
+  /*
+   * On a phone the plate is pinned and the card scrolls behind it, so it
+   * needs an opaque ground of its own — without one the caption and the first
+   * dish print on top of each other.
+   */
+  background: var(--color-nero);
+  padding-bottom: 1rem;
+}
+
+.passe-disco {
+  /* Small enough that the card is still readable behind it: a pinned plate
+     that eats half the viewport stops being a plate and becomes a lid. */
+  width: min(58vw, 15rem);
+  margin-inline: auto;
+}
+
+.passe-disco {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--color-fondo);
+}
+
+.passe-disco img {
+  object-fit: cover;
+}
+
+/* The frost. Clear in the middle, opaque at the rim. */
+.passe-gelo {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  backdrop-filter: blur(14px) saturate(1.2);
+  -webkit-backdrop-filter: blur(14px) saturate(1.2);
+  -webkit-mask-image: radial-gradient(
+    circle at 50% 50%,
+    transparent 40%,
+    #000 76%
+  );
+  mask-image: radial-gradient(circle at 50% 50%, transparent 40%, #000 76%);
+  pointer-events: none;
+}
+
+/* The rim: a hairline, an inner shadow that seats the dish in the glass, and
+   one warm highlight at the top left where the light in the room would be. */
+.passe-cerchio {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1px solid var(--bordo-vivo);
+  box-shadow:
+    inset 0 0 70px rgba(0, 0, 0, 0.75),
+    inset 2px 3px 22px rgba(255, 122, 69, 0.12);
+  pointer-events: none;
+}
+
+.passe-piede {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.passe-numero {
+  color: var(--color-latte);
+  flex: none;
+}
+
+.passe-nome {
+  font-family: var(--font-titolo);
+  font-weight: 500;
+  font-size: 0.9375rem;
+  letter-spacing: -0.01em;
+}
+
+/* The card itself: pure type on black, no rules between dishes. */
+.carta-elenco {
+  margin-top: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.carta-portata-nome {
+  padding-bottom: 0.75rem;
+}
+
+.carta-piatto {
+  display: grid;
+  grid-template-columns: 2rem minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 0.75rem;
+  width: 100%;
+  padding-block: 0.875rem;
+  background: none;
+  border: 0;
+  border-top: 1px solid var(--bordo);
+  text-align: left;
+  color: inherit;
+  cursor: pointer;
+  transition: border-color var(--t-tocco) var(--e-tocco);
+}
+
+.carta-voce:last-child .carta-piatto {
+  border-bottom: 1px solid var(--bordo);
+}
+
+.carta-numero,
+.carta-prezzo {
+  font-size: 0.6875rem;
+  letter-spacing: 0.1em;
+  color: var(--color-cenere);
+  font-variant-numeric: tabular-nums;
+  transition: color var(--t-tocco) var(--e-tocco);
+}
+
+.carta-nome {
+  font-family: var(--font-titolo);
+  font-weight: 500;
+  font-size: clamp(1.0625rem, 0.95rem + 0.6vw, 1.375rem);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  transition: color var(--t-tocco) var(--e-tocco);
+}
+
+/* The dish on the plate is marked by light, not by a fill: its rule and its
+   figures come up to full white. */
+.carta-voce-viva .carta-piatto {
+  border-top-color: var(--bordo-acceso);
+}
+
+.carta-voce-viva .carta-numero,
+.carta-voce-viva .carta-prezzo {
+  color: var(--color-latte);
+}
+
+.carta-dettaglio {
+  padding-left: 2.75rem;
+  padding-bottom: 1rem;
+  max-width: 30rem;
+}
+
+.carta-nodo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.875rem;
+  padding-bottom: 0.5rem;
+}
+
+.carta-nodo span {
+  color: var(--color-latte);
+}
+
+.carta-piede {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.5rem 2.5rem;
+  margin-top: clamp(2rem, 5vw, 3rem);
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--bordo);
+}
+
+@media (hover: hover) {
+  /* Pointing at a dish quiets the others, the way a finger on a printed
+     menu does. Nothing depends on it — on touch every dish stays full. */
+  .carta-elenco:has(.carta-piatto:hover) .carta-nome {
+    color: var(--color-cenere);
+  }
+
+  .carta-elenco .carta-voce:hover .carta-nome {
+    color: var(--color-latte);
+  }
+}
+
+@media (min-width: 900px) {
+  .carta-impianto {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.85fr);
+    column-gap: clamp(3rem, 6vw, 6rem);
+    align-items: start;
+  }
+
+  .carta-elenco {
+    margin-top: 0;
+    order: 1;
+  }
+
+  .passe {
+    order: 2;
+    top: 6rem;
+    max-width: 26rem;
+    background: none;
+    padding-bottom: 0;
+    margin-bottom: 0;
+  }
+
+  .passe-disco {
+    width: 100%;
+  }
+
+  .passe-piede {
+    justify-content: flex-start;
+    text-align: left;
+  }
+
+  .carta-piatto {
+    grid-template-columns: 2.75rem minmax(0, 1fr) auto;
+    padding-block: 1.125rem;
+  }
+
+  .carta-dettaglio {
+    padding-left: 3.5rem;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Prima del piatto
+   -------------------------------------------------------------------------- */
+
+.materie-nastro {
+  display: flex;
+  gap: 1rem;
+  margin-top: clamp(2rem, 5vw, 3rem);
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  scroll-padding-inline-start: var(--sporgenza);
+  padding-inline: var(--sporgenza) var(--spacing-margine);
+  padding-bottom: 1.25rem;
+  scrollbar-width: thin;
+}
+
+.materia {
+  flex: 0 0 min(62vw, 15rem);
+  scroll-snap-align: start;
+  padding: 0.75rem 0.75rem 1.125rem;
+}
+
+.materia-lastra {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+.materia-riga {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.materia-provenienza {
+  margin-top: 0.5rem;
+}
+
+.materia .nota {
+  margin-top: 0.5rem;
+}
+
+@media (min-width: 900px) {
+  .materia {
+    flex-basis: 19rem;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Il calendario
+   -------------------------------------------------------------------------- */
+
+/*
+ * Depth of field as a way of saying "now".
+ *
+ * The season the reader is actually in is in focus; the other three are
+ * behind glass, further away in the year. It is the same optical idea as the
+ * plate, applied to time instead of to a dish — and unlike a set of tabs it
+ * tells you where you are without asking you to click anything.
+ *
+ * Only the photographs blur. The lists stay sharp, because a section that
+ * hides three quarters of its information behind a blur is a section nobody
+ * can read.
+ */
+.anno-griglia {
+  display: grid;
+  gap: 1rem;
+  margin-top: clamp(2rem, 5vw, 3.5rem);
+}
+
+.stagione {
+  padding: 1.25rem;
+}
+
+.stagione-lastra {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  margin-bottom: 1.125rem;
+}
+
+.stagione-lastra img {
+  filter: blur(6px) saturate(0.55) brightness(0.6);
+  transform: scale(1.08);
+  transition:
+    filter var(--t-scena) var(--e-vetro),
+    transform var(--t-scena) var(--e-vetro);
+}
+
+.stagione:has(.stagione-ora-marca) .stagione-lastra img {
+  filter: none;
+  transform: none;
+}
+
+.stagione-nome {
+  margin-top: 0.375rem;
+}
+
+.stagione-elenco {
+  margin-top: 1rem;
+  font-size: 0.875rem;
+}
+
+.stagione-elenco li {
+  padding-block: 0.375rem;
+  border-top: 1px solid var(--bordo);
+  color: var(--color-cenere);
+}
+
+.stagione:has(.stagione-ora-marca) .stagione-elenco li {
+  color: var(--color-latte);
+}
+
+.stagione-nota {
+  margin-top: 1rem;
+}
+
+/* The live marker: the only place the ember is allowed to be a shape. */
+.stagione-ora-marca {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding-bottom: 0.625rem;
+  color: var(--color-brace);
+}
+
+.stagione-ora-punto {
+  width: 0.4375rem;
+  height: 0.4375rem;
+  border-radius: 50%;
+  background: var(--color-brace);
+  box-shadow: 0 0 12px rgba(255, 122, 69, 0.8);
+  flex: none;
+}
+
+@media (min-width: 700px) {
+  .anno-griglia {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1100px) {
+  .anno-griglia {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  /* The current season sits a little forward of the other three. */
+  .stagione:has(.stagione-ora-marca) {
+    transform: translateY(-1.25rem);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   In cucina
+   -------------------------------------------------------------------------- */
+
+/*
+ * The kitchen is behind the room, so it is literally behind: the photograph
+ * sits under the type at low opacity, a ghost of the pass rather than a
+ * picture of it.
+ */
+.cucina {
+  position: relative;
+  isolation: isolate;
+}
+
+.cucina-fondo {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+}
+
+.cucina-fondo img {
+  object-fit: cover;
+  opacity: 0.26;
+}
+
+.cucina-fondo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    120% 80% at 50% 40%,
+    transparent,
+    rgba(0, 0, 0, 0.85) 72%
+  );
+}
+
+.cucina-testo {
+  margin-top: 1.5rem;
+}
+
+.cucina-gesti {
+  display: grid;
+  gap: 0;
+  margin-top: clamp(2.5rem, 6vw, 4rem);
+}
+
+.cucina-gesto {
+  padding-block: 1.125rem;
+  border-top: 1px solid var(--bordo);
+}
+
+.cucina-gesto dt {
+  display: flex;
+  align-items: baseline;
+  gap: 0.875rem;
+}
+
+.cucina-gesto dd {
+  margin-top: 0.375rem;
+  padding-left: 2.25rem;
+}
+
+@media (min-width: 900px) {
+  .cucina-apertura {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    column-gap: clamp(2rem, 5vw, 5rem);
+    align-items: end;
+  }
+
+  .cucina-testo {
+    margin-top: 0;
+  }
+
+  .cucina-gesti {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: clamp(2rem, 5vw, 4rem);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Cantina
+   -------------------------------------------------------------------------- */
+
+.cantina-lastra {
+  margin-top: clamp(2rem, 5vw, 3rem);
+  padding: 1.5rem;
+}
+
+.cantina-voce {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  column-gap: 1rem;
+  padding-block: 1rem;
+  border-top: 1px solid var(--bordo);
+}
+
+.cantina-voce:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.cantina-categoria {
+  font-family: var(--font-titolo);
+  font-weight: 500;
+  font-size: clamp(1.125rem, 1rem + 0.7vw, 1.5rem);
+  letter-spacing: -0.02em;
+}
+
+.cantina-numero {
+  font-family: var(--font-titolo);
+  font-weight: 500;
+  font-size: clamp(1rem, 0.9rem + 0.5vw, 1.25rem);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-cenere);
+}
+
+.cantina-nota {
+  grid-column: 1 / -1;
+  margin-top: 0.25rem;
+}
+
+.cantina-figura {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  margin-top: 2rem;
+}
+
+.cantina-avvertenza {
+  margin-top: 1.25rem;
+}
+
+@media (min-width: 900px) {
+  .cantina-corpo {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    column-gap: clamp(2.5rem, 5vw, 5rem);
+    align-items: start;
+  }
+
+  .cantina-figura {
+    margin-top: 0;
+    aspect-ratio: 3 / 4;
+  }
+
+  .cantina-lastra {
+    margin-top: 0;
+    padding: clamp(1.75rem, 2.5vw, 2.5rem);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   A tavola
+   -------------------------------------------------------------------------- */
+
+/*
+ * The one section with no glass at all. After eight panes the page needs a
+ * moment of nothing between the reader and the room.
+ */
+.tavola-luce {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+}
+
+.tavola-luce img {
+  object-fit: cover;
+}
+
+.tavola-enunciato {
+  margin-top: 2rem;
+  max-width: 20ch;
+}
+
+.tavola-testo {
+  margin-top: 1.5rem;
+}
+
+@media (min-width: 900px) {
+  .tavola-luce {
+    aspect-ratio: 21 / 9;
+  }
+
+  .tavola-corpo {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    column-gap: clamp(2rem, 5vw, 5rem);
+    align-items: end;
+    margin-top: clamp(2.5rem, 5vw, 4rem);
+  }
+
+  .tavola-enunciato,
+  .tavola-testo {
+    margin-top: 0;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Prenota
+   -------------------------------------------------------------------------- */
+
+.prenota-lastra {
+  margin-top: clamp(2rem, 5vw, 3rem);
+  padding: 1.5rem;
+}
+
+.prenota-orari {
+  margin-top: 2rem;
+}
+
+.prenota-orario {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.25rem 1rem;
+  padding-block: 0.75rem;
+  border-top: 1px solid var(--bordo);
+}
+
+.prenota-orario dd {
+  font-size: 0.875rem;
+  text-align: right;
+}
+
+.prenota-orario-fascia {
+  display: block;
+  color: var(--color-cenere);
+}
+
+.prenota-campo {
+  position: relative;
+  padding-block: 1.5rem;
+}
+
+.prenota-campo + .prenota-campo::before {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  border-top: 1px solid var(--bordo);
+}
+
+.prenota-campo:first-child {
+  padding-top: 0;
+}
+
+.prenota-campo legend,
+.prenota-campo > label {
+  display: block;
+  padding-bottom: 0.875rem;
+}
+
+/* An answered field grows the tie from the wordmark. */
+.prenota-fatto::before {
+  content: "";
+  display: inline-block;
+  vertical-align: middle;
+  width: 0.9em;
+  height: 1px;
+  margin-right: 0.5em;
+  margin-bottom: 0.15em;
+  background: var(--color-latte);
+}
+
+.prenota-data {
+  width: 100%;
+  max-width: 16rem;
+  font-family: var(--font-titolo);
+  font-weight: 500;
+  font-size: clamp(1.25rem, 1.1rem + 0.6vw, 1.625rem);
+  letter-spacing: -0.02em;
+  color: var(--color-latte);
+  background: none;
+  border: 0;
+  border-bottom: 1px solid var(--bordo-vivo);
+  padding-block: 0.5rem;
+  min-height: 48px;
+  transition: border-color var(--t-tocco) var(--e-tocco);
+  color-scheme: dark;
+}
+
+.prenota-data:focus {
+  border-bottom-color: var(--color-latte);
+}
+
+.prenota-fascia + .prenota-fascia {
+  margin-top: 1.25rem;
+}
+
+.prenota-fascia-nome {
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.625rem;
+  padding-bottom: 0.625rem;
+}
+
+.prenota-fascia-nota {
+  text-transform: none;
+  letter-spacing: 0.01em;
+  padding-left: 0.75rem;
+}
+
+.prenota-pastiglie {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+/* Real radios under glass chips: arrow keys, grouping and disabled states
+   all come free, none of which a div with a click handler would have. */
+.prenota-pastiglia {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 4.5rem;
+  min-height: 48px;
+  padding-inline: 1rem;
+  border: 1px solid var(--bordo);
+  border-radius: 2px;
+  background: var(--vetro-velo);
+  font-size: 0.875rem;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  transition:
+    background-color var(--t-tocco) var(--e-tocco),
+    border-color var(--t-tocco) var(--e-tocco),
+    color var(--t-tocco) var(--e-tocco);
+}
+
+.prenota-pastiglia input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.prenota-pastiglia:hover:not(.prenota-pastiglia-spenta) {
+  border-color: var(--bordo-acceso);
+}
+
+.prenota-pastiglia:has(input:checked) {
+  background: var(--color-latte);
+  border-color: var(--color-latte);
+  color: var(--color-nero);
+}
+
+.prenota-pastiglia:has(input:focus-visible) {
+  outline: 2px solid var(--color-brace);
+  outline-offset: 3px;
+}
+
+.prenota-pastiglia-spenta {
+  color: #55524e;
+  border-color: rgba(255, 255, 255, 0.05);
+  cursor: not-allowed;
+}
+
+.prenota-avviso {
+  padding: 0.875rem 1rem;
+  border-left: 2px solid var(--color-brace);
+  background: var(--vetro-velo);
+  font-size: 0.9375rem;
+}
+
+.prenota-errore {
+  padding-top: 0.75rem;
+  font-size: 0.8125rem;
+  color: var(--color-brace);
+}
+
+.prenota-piede {
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--bordo);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.prenota-piede .azione {
+  width: 100%;
+}
+
+.prenota-email {
+  color: var(--color-latte);
+  white-space: nowrap;
+}
+
+.prenota-esito-titolo {
+  font-family: var(--font-titolo);
+  font-weight: 500;
+  font-size: clamp(1.75rem, 1.2rem + 2.4vw, 3rem);
+  line-height: 1.04;
+  letter-spacing: -0.03em;
+}
+
+.prenota-esito-avviso {
+  margin-top: 0.875rem;
+  color: var(--color-brace);
+  max-width: 24rem;
+}
+
+.prenota-riepilogo {
+  margin-block: 1.75rem;
+}
+
+.prenota-riepilogo > div {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.25rem 1rem;
+  padding-block: 0.875rem;
+  border-top: 1px solid var(--bordo);
+}
+
+.prenota-riepilogo dd {
+  font-family: var(--font-titolo);
+  font-weight: 500;
+  font-size: 1.0625rem;
+  text-align: right;
+}
+
+.prenota-esito .azione {
+  margin-top: 1.5rem;
+}
+
+@media (scripting: enabled) {
+  .prenota-esito > * {
+    animation: accendi var(--t-vetro) var(--e-vetro) both;
+  }
+  .prenota-esito > *:nth-child(2) {
+    animation-delay: 70ms;
+  }
+  .prenota-esito > *:nth-child(3) {
+    animation-delay: 130ms;
+  }
+  .prenota-esito > *:nth-child(4) {
+    animation-delay: 190ms;
+  }
+  .prenota-esito > *:nth-child(5) {
+    animation-delay: 240ms;
+  }
+}
+
+@media (min-width: 900px) {
+  .prenota-corpo {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    column-gap: clamp(2.5rem, 5vw, 5rem);
+    align-items: start;
+  }
+
+  .prenota-lastra {
+    margin-top: 0;
+    padding: clamp(2rem, 3vw, 3rem);
+  }
+
+  .prenota-piede {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .prenota-piede .azione {
+    width: auto;
+    flex: none;
+  }
+
+  .prenota-piede .nota {
+    max-width: 22rem;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Dove siamo
+   -------------------------------------------------------------------------- */
+
+.dove-registri {
+  margin-top: clamp(2rem, 5vw, 3rem);
+  display: grid;
+  gap: 2rem;
+}
+
+.dove-etichetta {
+  padding-bottom: 0.875rem;
+}
+
+.dove-voce {
+  padding-block: 0.75rem;
+  border-top: 1px solid var(--bordo);
+}
+
+.dove-voce dt {
+  font-size: 0.9375rem;
+}
+
+.dove-voce dd {
+  margin-top: 0.1875rem;
+}
+
+.dove-avvertenza {
+  margin-top: 1rem;
+}
+
+.dove-avvertenza code {
+  font-family: var(--font-testo);
+  color: var(--color-latte);
+}
+
+.dove-figura {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  margin-top: 2rem;
+}
+
+@media (min-width: 700px) {
+  .dove-registri {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2.5rem;
+  }
+}
+
+@media (min-width: 900px) {
+  .dove-corpo {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    column-gap: clamp(2.5rem, 5vw, 5rem);
+    align-items: start;
+  }
+
+  .dove-figura {
+    margin-top: 0;
+    aspect-ratio: 3 / 4;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Chiusura and footer — the lights go out
+   -------------------------------------------------------------------------- */
+
+.chiusura-enunciato {
+  max-width: 14ch;
+}
+
+.chiusura-testo {
+  margin-top: 1.5rem;
+}
+
+.chiusura .azione {
+  margin-top: 2.5rem;
+}
+
+.piede {
+  padding-top: clamp(2.5rem, 5vw, 4rem);
+  padding-bottom: clamp(2rem, 4vw, 3rem);
+  border-top: 1px solid var(--bordo);
+}
+
+.piede-corpo {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.piede-nav ul {
+  display: grid;
+  gap: 0;
+}
+
+.piede-nav a {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  font-size: 0.8125rem;
+  color: var(--color-cenere);
+  transition: color var(--t-tocco) var(--e-tocco);
+}
+
+.piede-nav a:hover {
+  color: var(--color-latte);
+}
+
+.piede-riga {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem 2rem;
+  margin-top: clamp(2.5rem, 5vw, 4rem);
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--bordo);
+}
+
+.piede-riga .nota {
+  max-width: 40rem;
+}
+
+@media (min-width: 600px) {
+  .piede-corpo {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 2rem;
+  }
+
+  .piede-nav a {
+    min-height: 32px;
+  }
+}
+
+@media (pointer: coarse) {
+  .piede-nav a {
+    min-height: 44px;
+  }
+}

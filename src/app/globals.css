@@ -1,0 +1,606 @@
+@import "tailwindcss";
+/*
+ * superfici.css is imported separately in layout.tsx, immediately after this
+ * file. It composes the sections out of the primitives declared here, at the
+ * same specificity, so source order decides the winner.
+ */
+
+/* ==========================================================================
+   OSTERIA NODO — SERVIZIO AL BUIO
+
+   The concept the whole interface is built on: this is the dining room after
+   the lights go down. The page is not "dark mode" and it is not pure black —
+   pure black is the pixel-off state, which reads as a screen with nothing on
+   it rather than as a room. This ground is lifted and warm, and lit by two
+   very soft pools, because an unlit room still has bounced light in it.
+
+   The only colour anywhere is the food; every surface is glass or steel.
+
+   Two consequences run through every token below.
+
+   1. The interface is achromatic. There is no brand colour, no accent fill,
+      no tinted panel. A dark page with a neon accent is the single most
+      generated look of the moment, and the way out of it is not a different
+      hue — it is refusing the hue. What is coloured here is a photograph of
+      a plate. Nothing else.
+
+   2. Glass is motivated, not applied. Blur appears where something is
+      genuinely being seen through: the rim of a plate, the window of the
+      pass, a season further away in the year. It is never a finish on a card.
+   ========================================================================== */
+
+@theme {
+  /* ---- Ground -------------------------------------------------------- */
+
+  /*
+   * Near-black, warm — not #000000.
+   *
+   * Pure black is literally the pixel-off state: it does not read as a dark
+   * room, it reads as a screen with nothing on it. A room after the lights go
+   * down still has bounced light in it, and it is warm, because what is left
+   * lighting it is a candle and the pass. Five per cent of lift and a warm
+   * cast is the whole difference between "unlit" and "switched off", and it
+   * costs nothing in contrast: the text still runs at 17.4:1.
+   */
+  --color-nero: #0e0b09;
+  /*
+   * The base a glass panel sits on. A pane of glass over literal nothing
+   * reads as a hole; one degree of lift makes it read as a surface.
+   */
+  --color-fondo: #15110e;
+
+  /* ---- Ink ------------------------------------------------------------ */
+
+  /*
+   * Warm white, not #ffffff. Pure white glares against a warm ground; half a
+   * degree of warmth is the difference between a room and a settings screen.
+   * 17.4:1 on the ground.
+   */
+  --color-latte: #f4f1eb;
+  /*
+   * Secondary. Raised when the ground was lifted off pure black: the old
+   * value held 5.5:1 against the bare room but only 4.4:1 once it sat inside
+   * a pane, because glass lifts the background under it too. 7.1:1 on the
+   * ground, 4.9:1 on the most solid pane — secondary everywhere, illegible
+   * nowhere.
+   */
+  --color-cenere: #a09b94;
+
+  /* ---- Light ---------------------------------------------------------- */
+
+  /*
+   * The one chromatic value in the entire interface, and it is a light
+   * source rather than a colour: focus rings, the live marker, the heat at
+   * the rim of the plate. It never fills a surface and never tints a
+   * background. Ember, deliberately not gold — gold on black is the luxury
+   * cliché this restaurant is not.
+   */
+  --color-brace: #ff7a45;
+
+  /* ---- Type ----------------------------------------------------------- */
+
+  /*
+   * A grotesque pair, not a serif-and-sans pair. The display face carries an
+   * optical-size axis and gets used only where it is large enough for that
+   * to show; the text face is a contemporary grotesk chosen for how it holds
+   * up small on black, where thin letterforms disappear.
+   */
+  --font-titolo: var(--font-bricolage), "Helvetica Neue", Helvetica, sans-serif;
+  --font-testo: var(--font-instrument), system-ui, -apple-system, sans-serif;
+
+  /* ---- Layout --------------------------------------------------------- */
+
+  --spacing-margine: clamp(1.25rem, 5vw, 5rem);
+  --width-sala: 88rem;
+  --width-lettura: 32rem;
+
+  /* ---- Motion --------------------------------------------------------- */
+
+  /*
+   * Three registers. Glass has weight: nothing here snaps, and nothing
+   * overshoots — a plate set down does not bounce.
+   */
+  --t-tocco: 180ms;
+  --t-vetro: 460ms;
+  --t-scena: 820ms;
+  --e-tocco: cubic-bezier(0.32, 0, 0.24, 1);
+  --e-vetro: cubic-bezier(0.22, 0.68, 0.28, 1);
+}
+
+:root {
+  /*
+   * ---- Glass ----------------------------------------------------------
+   *
+   * One material, four states. Every pane on the site is one of these; there
+   * is no per-section glass. Opacity climbs with how much the reader is
+   * meant to touch the thing — the booking panel is the most solid surface
+   * on the page because it is the one you put your hands on.
+   */
+  --vetro-velo: rgba(255, 255, 255, 0.03); /* barely there — atmosphere */
+  --vetro-lastra: rgba(255, 255, 255, 0.065); /* the default pane */
+  --vetro-fermo: rgba(255, 255, 255, 0.085); /* interactive surfaces */
+  --vetro-solido: rgba(255, 255, 255, 0.14); /* the booking panel */
+
+  --bordo: rgba(255, 255, 255, 0.09);
+  --bordo-vivo: rgba(255, 255, 255, 0.18);
+  --bordo-acceso: rgba(255, 255, 255, 0.34);
+
+  --sfocatura: 18px;
+
+  /*
+   * Distance from the trim edge to the content edge. Measured in cqw against
+   * <main> rather than vw: 100vw includes the scrollbar, and a bleed built
+   * on it overshoots the page by half a scrollbar on every desktop.
+   */
+  --sporgenza: calc(
+    max(0px, (100cqw - var(--width-sala)) / 2) + var(--spacing-margine)
+  );
+}
+
+/* --------------------------------------------------------------------------
+   Base
+   -------------------------------------------------------------------------- */
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  background: var(--color-nero);
+}
+
+/*
+ * The room is lit from somewhere.
+ *
+ * Two very soft warm pools — one falling from above, one low and to the right
+ * where the pass would be — fixed to the viewport so the ground is never a
+ * flat field wherever you are on the page. At five and three per cent they
+ * are not visible as gradients; what is visible is that the dark has depth
+ * instead of being a single dead value.
+ *
+ * Deliberately warm and deliberately anchored. A cool blob drifting behind a
+ * blur is the exact tell of the genre this design is trying not to join.
+ */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      118% 76% at 50% -12%,
+      rgba(255, 178, 124, 0.055),
+      transparent 62%
+    ),
+    radial-gradient(
+      88% 58% at 88% 108%,
+      rgba(255, 138, 88, 0.038),
+      transparent 62%
+    );
+}
+
+body {
+  color: var(--color-latte);
+  font-family: var(--font-testo);
+  font-size: clamp(0.9375rem, 0.9rem + 0.2vw, 1.0625rem);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  /*
+   * `clip`, not `hidden`. Photographs run off the trim edge; something has to
+   * absorb that. `hidden` turns the body into a scroll container and every
+   * `position: sticky` on the page silently stops working.
+   */
+  overflow-x: clip;
+}
+
+::selection {
+  background: var(--color-latte);
+  color: var(--color-nero);
+}
+
+[id] {
+  scroll-margin-top: 6rem;
+}
+
+/* --------------------------------------------------------------------------
+   Layout
+   -------------------------------------------------------------------------- */
+
+/*
+ * The container is the room, not a grid.
+ *
+ * There is no twelve-column register here and no margin column: this page is
+ * composed in depth rather than in columns, and its structure comes from the
+ * edges of panes and the black between them. Sections place their own
+ * children.
+ */
+main {
+  container-type: inline-size;
+}
+
+.sala {
+  width: 100%;
+  max-width: var(--width-sala);
+  margin-inline: auto;
+  padding-inline: var(--spacing-margine);
+}
+
+.tratto {
+  padding-block: clamp(5rem, 12vw, 11rem);
+}
+
+.tratto-stretto {
+  padding-block: clamp(3rem, 7vw, 6rem);
+}
+
+/* --------------------------------------------------------------------------
+   Glass
+   -------------------------------------------------------------------------- */
+
+/*
+ * The one pane. Everything that is a surface on this site is this element
+ * with one modifier; there is no second glass recipe anywhere.
+ *
+ * Corners are 2px, not 24px. A large radius is what makes the whole glass
+ * genre read as the same template — at this scale the corner reads as a cut
+ * edge of a real pane rather than as a card.
+ */
+.lastra {
+  position: relative;
+  background: var(--vetro-lastra);
+  border: 1px solid var(--bordo);
+  border-radius: 2px;
+  backdrop-filter: blur(var(--sfocatura)) saturate(1.4);
+  -webkit-backdrop-filter: blur(var(--sfocatura)) saturate(1.4);
+}
+
+/*
+ * The top edge catches the light, the way a real pane does. One gradient
+ * hairline, no glow, no coloured border — a lit outline on every side is the
+ * other thing that makes this genre look generated.
+ */
+.lastra::before {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.28) 22%,
+    rgba(255, 255, 255, 0.28) 78%,
+    transparent
+  );
+  pointer-events: none;
+}
+
+.lastra-solida {
+  background: var(--vetro-solido);
+  border-color: var(--bordo-vivo);
+}
+
+/*
+ * Phones get less blur, not none.
+ *
+ * A full-width backdrop-filter is the most expensive thing on this page and
+ * a phone repaints it on every scroll frame. Halving the radius is invisible
+ * at arm's length and roughly halves the cost.
+ */
+@media (max-width: 899px) {
+  :root {
+    --sfocatura: 10px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Type
+   -------------------------------------------------------------------------- */
+
+/*
+ * The display face runs wide and tight. On black, a grotesque set large with
+ * negative tracking reads as engineered rather than as a headline — which is
+ * the register this restaurant speaks in.
+ */
+.enunciato {
+  font-family: var(--font-titolo);
+  font-weight: 500;
+  font-size: clamp(2.5rem, 1.1rem + 6vw, 6rem);
+  line-height: 0.96;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+
+.titolo {
+  font-family: var(--font-titolo);
+  font-weight: 500;
+  font-size: clamp(1.75rem, 1.15rem + 2.6vw, 3.25rem);
+  line-height: 1.04;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+
+.sottotitolo {
+  font-family: var(--font-titolo);
+  font-weight: 500;
+  font-size: clamp(1.125rem, 1rem + 0.6vw, 1.5rem);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+/*
+ * Interface text. Uppercase and letterspaced, but only ever at this one size
+ * — a page with four different small-caps sizes reads as a dashboard.
+ */
+.marca {
+  font-family: var(--font-testo);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  line-height: 1.2;
+  color: var(--color-cenere);
+}
+
+.marca-viva {
+  color: var(--color-latte);
+}
+
+.dato {
+  font-family: var(--font-testo);
+  font-size: 0.8125rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.01em;
+  color: var(--color-cenere);
+}
+
+.testo {
+  max-width: var(--width-lettura);
+  color: var(--color-latte);
+}
+
+.testo-lieve {
+  color: var(--color-cenere);
+}
+
+.nota {
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--color-cenere);
+  max-width: 26rem;
+}
+
+/* --------------------------------------------------------------------------
+   Controls
+   -------------------------------------------------------------------------- */
+
+:where(a, button, input, select, textarea, summary):focus-visible {
+  outline: 2px solid var(--color-brace);
+  outline-offset: 3px;
+}
+
+/*
+ * The primary action is the only solid white object on the site. On a black
+ * page nothing shouts louder, and it needs no colour to do it.
+ */
+.azione {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.625rem;
+  font-family: var(--font-testo);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 1rem 1.75rem;
+  min-height: 48px;
+  border-radius: 2px;
+  border: 1px solid var(--bordo-vivo);
+  background: var(--vetro-fermo);
+  color: var(--color-latte);
+  cursor: pointer;
+  backdrop-filter: blur(var(--sfocatura));
+  -webkit-backdrop-filter: blur(var(--sfocatura));
+  transition:
+    background-color var(--t-tocco) var(--e-tocco),
+    border-color var(--t-tocco) var(--e-tocco),
+    color var(--t-tocco) var(--e-tocco),
+    transform var(--t-tocco) var(--e-tocco);
+}
+
+.azione:hover {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: var(--bordo-acceso);
+}
+
+.azione:active {
+  transform: translateY(1px);
+}
+
+.azione-piena {
+  background: var(--color-latte);
+  border-color: var(--color-latte);
+  color: var(--color-nero);
+}
+
+.azione-piena:hover {
+  background: #ffffff;
+  border-color: #ffffff;
+  color: var(--color-nero);
+}
+
+/* Tertiary: a word with a rule under it. No box, no fill. */
+.rimando {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-cenere);
+  transition: color var(--t-tocco) var(--e-tocco);
+}
+
+.rimando::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: calc(50% - 0.95em);
+  height: 1px;
+  background: var(--bordo-vivo);
+  transition: background-color var(--t-tocco) var(--e-tocco);
+}
+
+.rimando:hover {
+  color: var(--color-latte);
+}
+
+.rimando:hover::after {
+  background: var(--color-latte);
+}
+
+.salta {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 100;
+}
+
+.salta:focus {
+  left: var(--spacing-margine);
+  top: 0.75rem;
+  padding: 0.75rem 1.25rem;
+  background: var(--color-latte);
+  color: var(--color-nero);
+  font-size: 0.6875rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+/* --------------------------------------------------------------------------
+   Photography
+   -------------------------------------------------------------------------- */
+
+/*
+ * A photograph in an unlit room does not end at a rectangle — it falls off
+ * into the dark. Every full-bleed image on the site is masked to dissolve at
+ * its edges, which is what stops the page reading as black bands alternating
+ * with picture bands.
+ */
+.dissolve {
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    #000 14%,
+    #000 82%,
+    transparent
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    #000 14%,
+    #000 82%,
+    transparent
+  );
+}
+/* --------------------------------------------------------------------------
+   Motion
+   -------------------------------------------------------------------------- */
+
+/*
+ * One arrival, used everywhere: a pane comes into focus. Blur resolving to
+ * zero is the only motion on this site that is about the material the site is
+ * made of, so it is the only motion the site uses.
+ *
+ * Gated on `scripting: enabled` so a visitor without JavaScript is never left
+ * looking at a page of blurred, half-transparent panels.
+ */
+@media (scripting: enabled) {
+  .arriva {
+    opacity: 0;
+    filter: blur(12px);
+    transform: translate3d(0, 12px, 0);
+    transition:
+      opacity var(--t-scena) var(--e-vetro),
+      filter var(--t-scena) var(--e-vetro),
+      transform var(--t-scena) var(--e-vetro);
+  }
+
+  .arriva-lastra {
+    opacity: 0;
+    clip-path: inset(0 0 100% 0);
+    transition:
+      opacity var(--t-vetro) var(--e-vetro),
+      clip-path var(--t-scena) var(--e-vetro);
+  }
+
+  .in-vista {
+    opacity: 1;
+    filter: none;
+    transform: none;
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+/* Page entry. The hidden state lives only in the keyframes, so if animations
+   never run every element is simply visible. */
+@keyframes accendi {
+  from {
+    opacity: 0;
+    filter: blur(10px);
+    transform: translate3d(0, 10px, 0);
+  }
+}
+
+.entra {
+  animation: accendi var(--t-scena) var(--e-vetro) both;
+  animation-delay: var(--attesa, 0ms);
+}
+
+@media (max-width: 899px) {
+  /* Blur is the expensive half of the entry; phones get the settle only. */
+  @keyframes accendi {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 10px, 0);
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  @media (scripting: enabled) {
+    .arriva,
+    .arriva-lastra {
+      opacity: 1;
+      filter: none;
+      transform: none;
+      clip-path: none;
+    }
+  }
+
+  .entra {
+    animation: none;
+  }
+
+  /* Depth of field is a state, not a movement — but under reduced motion the
+     out-of-focus seasons resolve so nothing is softened against the reader's
+     wishes. */
+  .stagione .stagione-lastra img {
+    filter: none;
+    transform: none;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
